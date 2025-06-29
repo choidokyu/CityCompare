@@ -167,21 +167,36 @@ body {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #timeFormatForm {
   display: flex;
   flex-direction: column;
-  gap: 0;
+}
+
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .option-row {
   display: flex;
   align-items: center;
-  margin-bottom: 8px;
 }
 
 .option-label {
   display: inline-block;
-  min-width: 130px;  /* 라벨 너비 고정 (둘 다 동일) */
+  min-width: 130px; /* 두 라벨 동일폭 */
   font-size: 16px;
   font-weight: bold;
   margin-right: 12px;
@@ -206,13 +221,10 @@ body {
   gap: 8px;
 }
 
-.apply-row {
+.option-actions {
+  display: flex;
+  justify-content: flex-end; /* 오른쪽 정렬 */
   margin-top: 16px;
-}
-
-.apply-row .option-content {
-  justify-content: flex-end;
-  width: 100%;
 }
 
 .apply-button {
