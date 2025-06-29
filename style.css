@@ -1,0 +1,117 @@
+body {
+  margin: 0;
+  background-color: #282c34;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+.clock-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+}
+.clock-board {
+  width: 90%;
+  background-color: #3a3f47;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.clock-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+}
+.clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  position: relative;
+}
+.clock-wrapper {
+  position: relative;
+  width: 80%;
+  aspect-ratio: 1 / 1;
+}
+.clock {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 5px solid white;
+  border-radius: 50%;
+  background-size: 90%;
+  background-position: center;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.ko {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/300px-Flag_of_South_Korea.svg.png');
+}
+.tz {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Flag_of_Tanzania.svg/300px-Flag_of_Tanzania.svg.png');
+}
+.hand {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+  transition: transform 0.05s ease-in-out;
+}
+.hour {
+  width: 6px;
+  height: 30%;
+  background: #787878;
+}
+.minute {
+  width: 4px;
+  height: 45%;
+  background: black;
+}
+.second {
+  width: 2px;
+  height: 45%;
+  background: red;
+  transition: none;
+}
+.center {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: black;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.circular-text {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.circular-text text {
+  font-size: 10px;
+  font-family: Arial;
+}
+.round-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border-radius: 50px;
+  display: block;
+  margin-left: auto;
+}
+.round-button:hover {
+  background-color: #218838;
+}
