@@ -56,7 +56,7 @@ function generateNumbers(region, hourFormat) {
   }
   const color = region === "korea" ? "dodgerblue" : "white";
 
-  for (let i = 1; i <= hourFormat; i++) {
+  for (let i = 0; i <= hourFormat; i++) {
     const textPath = document.createElementNS(svgNS, "textPath");
     textPath.setAttributeNS(xlinkNS, "xlink:href", pathId);
     textPath.setAttribute("startOffset", `${((i - 1) * 100 / hourFormat).toFixed(4)}%`);
