@@ -62,7 +62,8 @@ function generateNumbers(region, hourFormat) {
     textPath.setAttribute("startOffset", `${(i * 100 / hourFormat).toFixed(4)}%`);
     textPath.setAttribute("text-anchor", "middle");
     textPath.setAttribute("fill", color);
-    textPath.textContent = i;
+    // 0만 12(12시간) 또는 24(24시간)으로 표기
+    textPath.textContent = (i === 0) ? hourFormat : i;
     container.appendChild(textPath);
   }
 }
