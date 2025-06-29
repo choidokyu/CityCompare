@@ -63,50 +63,37 @@
     <!-- 아래 옵션 박스 -->
     <div class="option-box">
       <form id="timeFormatForm">
-        <div class="option-list">
-          <!-- 시간제 -->
-          <div class="option-row">
-            <span class="option-label">시간제:</span>
-            <div class="option-content">
-              <label>
-                <input type="radio" name="hour-format" value="12" checked> 12시간
-              </label>
-              <label>
-                <input type="radio" name="hour-format" value="24"> 24시간
-              </label>
-            </div>
+        <!-- 시간제 -->
+        <div class="option-row">
+          <span class="option-label">시간제:</span>
+          <div class="option-content">
+            <label>
+              <input type="radio" name="hour-format" value="12" checked> 12시간
+            </label>
+            <label>
+              <input type="radio" name="hour-format" value="24"> 24시간
+            </label>
           </div>
-          <!-- 비교국가선택 -->
-          <div class="option-row">
-            <span class="option-label">비교국가선택:</span>
-            <div class="option-content">
-              <div class="compare-inline-group">
-                <div class="compare-group">
-                  <select id="country-left">
-                    <option value="Korea" selected>한국</option>
-                    <option value="Tanzania">탄자니아</option>
-                  </select>
-                  <select id="city-left">
-                    <option value="Seoul" selected>서울</option>
-                    <option value="Busan">부산</option>
-                  </select>
-                </div>
-                <div class="compare-group">
-                  <select id="country-right">
-                    <option value="Korea">한국</option>
-                    <option value="Tanzania" selected>탄자니아</option>
-                  </select>
-                  <select id="city-right">
-                    <option value="DarEsSalaam" selected>다르에스살람</option>
-                    <option value="Dodoma">도도마</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- 옵션 계속 추가 가능 -->
         </div>
-        <!-- 적용 버튼만 오른쪽 정렬로 아래에 별도 배치 -->
+        <!-- UTC 오프셋 -->
+        <div class="option-row">
+          <span class="option-label">UTC 오프셋:</span>
+          <div class="option-content">
+            <select id="utc-offset-select">
+              <option value="9" selected>UTC+9 (한국, 서울)</option>
+              <option value="3">UTC+3 (탄자니아, 다르에스살람)</option>
+              <option value="0">UTC+0 (런던)</option>
+              <option value="1">UTC+1 (베를린)</option>
+              <option value="2">UTC+2 (카이로)</option>
+              <option value="5.5">UTC+5.5 (인도, 뉴델리)</option>
+              <option value="8">UTC+8 (중국, 베이징)</option>
+              <option value="-5">UTC-5 (뉴욕)</option>
+              <option value="-8">UTC-8 (LA)</option>
+              <!-- 필요한 UTC 오프셋을 더 추가 가능 -->
+            </select>
+          </div>
+        </div>
+        <!-- 적용 버튼 -->
         <div class="option-actions">
           <button type="submit" class="apply-button">적용</button>
         </div>
