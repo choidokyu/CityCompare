@@ -102,3 +102,27 @@ document.getElementById("timeFormatForm").addEventListener("submit", function(e)
   generateNumbers("tanzania", hourFormat);
   updateClocks();
 });
+
+
+
+const offsets = [
+  "-12:00","-11:00","-10:00","-09:30","-09:00","-08:00","-07:00","-06:00",
+  "-05:00","-04:30","-04:00","-03:00","-02:00","-01:00",
+  "+00:00","+01:00","+02:00","+03:00","+04:00","+04:30",
+  "+05:00","+05:30","+05:45","+06:00","+06:30","+07:00",
+  "+08:00","+09:00","+09:30","+10:00","+11:00","+12:00","+13:00","+14:00"
+];
+
+function populateOffsets() {
+  const left = document.getElementById('utc-offset-left');
+  const right = document.getElementById('utc-offset-right');
+  offsets.forEach(o => {
+    const text = `UTC${o}`;
+    left.add(new Option(text, o));
+    right.add(new Option(text, o));
+  });
+  // 기본값: 한국(UTC+09:00), 탄자니아(UTC+03:00)
+  left.value = "+09:00";
+  right.value = "+03:00";
+}
+populateOffsets();
