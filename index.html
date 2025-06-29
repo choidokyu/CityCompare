@@ -63,44 +63,49 @@
     <!-- 아래 옵션 박스 -->
     <div class="option-box">
       <form id="timeFormatForm">
-        <!-- 비교 국가 선택 라벨 및 셀렉트박스 4개 -->
-        <span class="label">비교 국가 선택 :</span>
-        <div class="compare-inline-group">
-          <!-- 왼쪽 그룹 -->
-          <div class="compare-group">
-            <select id="country-left">
-              <option value="Korea" selected>한국</option>
-              <option value="Tanzania">탄자니아</option>
-            </select>
-            <select id="city-left">
-              <option value="Seoul" selected>서울</option>
-              <option value="Busan">부산</option>
-            </select>
-          </div>
-          <!-- 오른쪽 그룹 -->
-          <div class="compare-group">
-            <select id="country-right">
-              <option value="Korea">한국</option>
-              <option value="Tanzania" selected>탄자니아</option>
-            </select>
-            <select id="city-right">
-              <option value="DarEsSalaam" selected>다르에스살람</option>
-              <option value="Dodoma">도도마</option>
-            </select>
+        <!-- 시간제 -->
+        <div class="option-row">
+          <span class="label">시간제:</span>
+          <label>
+            <input type="radio" name="hour-format" value="12" checked> 12시간
+          </label>
+          <label>
+            <input type="radio" name="hour-format" value="24"> 24시간
+          </label>
+        </div>
+        <!-- 비교국가선택 -->
+        <div class="option-row" style="margin-top: 12px;">
+          <span class="label">비교 국가 선택 :</span>
+          <div class="compare-inline-group">
+            <div class="compare-group">
+              <select id="country-left">
+                <option value="Korea" selected>한국</option>
+                <option value="Tanzania">탄자니아</option>
+              </select>
+              <select id="city-left">
+                <option value="Seoul" selected>서울</option>
+                <option value="Busan">부산</option>
+              </select>
+            </div>
+            <div class="compare-group">
+              <select id="country-right">
+                <option value="Korea">한국</option>
+                <option value="Tanzania" selected>탄자니아</option>
+              </select>
+              <select id="city-right">
+                <option value="DarEsSalaam" selected>다르에스살람</option>
+                <option value="Dodoma">도도마</option>
+              </select>
+            </div>
           </div>
         </div>
-        <!-- 시간제 라디오버튼 -->
-        <span class="label time-label">시간제:</span>
-        <label>
-          <input type="radio" name="hour-format" value="12" checked> 12시간
-        </label>
-        <label>
-          <input type="radio" name="hour-format" value="24"> 24시간
-        </label>
-        <!-- 적용버튼은 항상 오른쪽 끝 -->
-        <button type="submit" class="apply-button">적용</button>
+        <!-- 적용 버튼 -->
+        <div class="option-row" style="margin-top: 14px;">
+          <button type="submit" class="apply-button">적용</button>
+        </div>
       </form>
     </div>
+
 
 
   <script src="main.js"></script>
