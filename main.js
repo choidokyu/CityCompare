@@ -11,16 +11,16 @@ function updateClocks() {
 function updateClock(time, region, label, hourFormat) {
   const seconds = time.getSeconds();
   const minutes = time.getMinutes();
-  let hours = time.getHours();
-  let displayHours = hours;
-  let maxHours = hourFormat;
+  const hours = time.getHours();
+  let displayHours;
 
   if (hourFormat === 12) {
-    displayHours = hours % 12;
-    if (displayHours === 0) displayHours = 12;
+    displayHours = hours % 12; // 0~11
+  } else {
+    displayHours = hours; // 0~23
   }
 
-  // 시계 바늘 각도 계산
+  // 시계 바늘 각도 (0부터 시작)
   const secondDeg = (seconds / 60) * 360;
   const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
   const hourDeg = (displayHours / hourFormat) * 360 + (minutes / 60) * (360 / hourFormat);
@@ -34,32 +34,32 @@ function updateClock(time, region, label, hourFormat) {
   let displayTime;
   if (hourFormat === 12) {
     const ampm = hours >= 12 ? 'PM' : 'AM';
-    let h12 = hours % 12;
-    if (h12 === 0) h12 = 12;
-    displayTime = `${String(h12).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} ${ampm}`;
+    const h = hours % 12; // 0~11
+    displayTime = `${String(h).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')} ${ampm}`;
   } else {
     displayTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
   document.getElementById(`${region}-textpath`).textContent = `${label} | ${dateStr} | ${displayTime}`;
 }
 
-// 시계 숫자(1~12 or 1~24) 동적으로 생성
+// 시계 숫자(0~11 or 0~23) 동적으로 생성
 function generateNumbers(region, hourFormat) {
   const svgNS = "http://www.w3.org/2000/svg";
   const xlinkNS = "http://www.w3.org/1999/xlink";
   const container = document.getElementById(`${region}-numbers`);
   const pathId = `#circlePath-${region}-numbers`;
 
-  // 이전 숫자 모두 삭제 후 새로 그림
+  // 기존 숫자 모두 삭제
   while (container.firstChild) {
     container.removeChild(container.firstChild);
   }
   const color = region === "korea" ? "dodgerblue" : "white";
 
-  for (let i = 0; i <= hourFormat; i++) {
+  // 0~(hourFormat-1)
+  for (let i = 0; i < hourFormat; i++) {
     const textPath = document.createElementNS(svgNS, "textPath");
     textPath.setAttributeNS(xlinkNS, "xlink:href", pathId);
-    textPath.setAttribute("startOffset", `${((i - 1) * 100 / hourFormat).toFixed(4)}%`);
+    textPath.setAttribute("startOffset", `${(i * 100 / hourFormat).toFixed(4)}%`);
     textPath.setAttribute("text-anchor", "middle");
     textPath.setAttribute("fill", color);
     textPath.textContent = i;
@@ -67,7 +67,7 @@ function generateNumbers(region, hourFormat) {
   }
 }
 
-// 처음 로딩 시 12시간 숫자 생성
+// 처음 로딩 시 숫자 생성
 generateNumbers("korea", hourFormat);
 generateNumbers("tanzania", hourFormat);
 
