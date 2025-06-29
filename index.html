@@ -60,6 +60,19 @@
       </div>
       <button class="round-button" onclick="fnButton()">확장&원복</button> 
     </div>
+    <!-- 아래 옵션 박스 -->
+    <div class="option-box">
+      <form id="timeFormatForm">
+        <span class="label">시계 기준:</span>
+        <label>
+          <input type="radio" name="hour-format" value="12" checked> 12시간
+        </label>
+        <label>
+          <input type="radio" name="hour-format" value="24"> 24시간
+        </label>
+        <button type="submit" class="apply-button">적용</button>
+      </form>
+    </div>
   </div>
   <script src="main.js"></script>
 </body>
