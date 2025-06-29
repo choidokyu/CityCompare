@@ -106,57 +106,54 @@ document.getElementById("timeFormatForm").addEventListener("submit", function(e)
 
 
 const offsets = [
-  { value: "-12:00", label: "UTC-12:00 (베이커섬, 미국령)" },
-  { value: "-11:00", label: "UTC-11:00 (니우에, 사모아)" },
-  { value: "-10:00", label: "UTC-10:00 (하와이, 타히티)" },
-  { value: "-09:30", label: "UTC-09:30 (마르키즈 제도, 프랑스령)" },
-  { value: "-09:00", label: "UTC-09:00 (알래스카, 감비어 제도)" },
-  { value: "-08:00", label: "UTC-08:00 (LA, 밴쿠버, 티후아나)" },
-  { value: "-07:00", label: "UTC-07:00 (덴버, 피닉스, 에드먼턴)" },
-  { value: "-06:00", label: "UTC-06:00 (시카고, 멕시코시티, 과테말라시티)" },
-  { value: "-05:00", label: "UTC-05:00 (뉴욕, 토론토, 리마, 보고타)" },
-  { value: "-04:30", label: "UTC-04:30 (카라카스, 베네수엘라)" },
-  { value: "-04:00", label: "UTC-04:00 (산티아고, 아순시온, 라파스)" },
-  { value: "-03:00", label: "UTC-03:00 (브라질리아, 부에노스아이레스, 몬테비데오)" },
-  { value: "-02:00", label: "UTC-02:00 (남조지아, 남샌드위치 제도)" },
-  { value: "-01:00", label: "UTC-01:00 (아조레스, 카보베르데)" },
-  { value: "+00:00", label: "UTC+00:00 (런던, 리스본, 카사블랑카)" },
-  { value: "+01:00", label: "UTC+01:00 (베를린, 파리, 로마, 마드리드)" },
-  { value: "+02:00", label: "UTC+02:00 (카이로, 아테네, 요하네스버그)" },
-  { value: "+03:00", label: "UTC+03:00 (모스크바, 탄자니아/다르에스살람, 이스탄불, 나이로비)" },
-  { value: "+03:30", label: "UTC+03:30 (테헤란, 이란)" },
-  { value: "+04:00", label: "UTC+04:00 (아제르바이잔, 두바이, 아부다비)" },
-  { value: "+04:30", label: "UTC+04:30 (카불, 아프가니스탄)" },
-  { value: "+05:00", label: "UTC+05:00 (이슬라마바드, 타슈켄트, 예카테린부르크)" },
-  { value: "+05:30", label: "UTC+05:30 (인도/뉴델리, 콜카타, 뭄바이)" },
-  { value: "+05:45", label: "UTC+05:45 (카트만두, 네팔)" },
-  { value: "+06:00", label: "UTC+06:00 (다카, 알마티, 비슈케크)" },
-  { value: "+06:30", label: "UTC+06:30 (양곤, 미얀마, 코코스 제도)" },
-  { value: "+07:00", label: "UTC+07:00 (방콕, 하노이, 자카르타)" },
-  { value: "+08:00", label: "UTC+08:00 (베이징, 싱가포르, 울란바토르, 퍼스)" },
-  { value: "+08:45", label: "UTC+08:45 (오스트레일리아 Eucla)" },
-  { value: "+09:00", label: "UTC+09:00 (서울, 도쿄, 야쿠츠크, 평양)" },
-  { value: "+09:30", label: "UTC+09:30 (애들레이드, 다윈)" },
-  { value: "+10:00", label: "UTC+10:00 (시드니, 멜버른, 블라디보스토크, 괌)" },
-  { value: "+10:30", label: "UTC+10:30 (오스트레일리아 Lord Howe)" },
-  { value: "+11:00", label: "UTC+11:00 (솔로몬 제도, 뉴칼레도니아, 마가단)" },
-  { value: "+12:00", label: "UTC+12:00 (피지, 오클랜드, 캄차카, 마셜 제도)" },
-  { value: "+12:45", label: "UTC+12:45 (채텀 제도, 뉴질랜드)" },
-  { value: "+13:00", label: "UTC+13:00 (통가, 사모아, 피닉스 제도)" },
-  { value: "+14:00", label: "UTC+14:00 (라인 제도, 키리바시)" }
+  { value: "-12:00", label: "UTC-12:00 베이커섬(미국령)" },
+  { value: "-11:00", label: "UTC-11:00 사모아(파고파고)" },
+  { value: "-10:00", label: "UTC-10:00 미국(하와이)" },
+  { value: "-09:00", label: "UTC-09:00 미국(알래스카)" },
+  { value: "-08:00", label: "UTC-08:00 미국(LA)" },
+  { value: "-07:00", label: "UTC-07:00 미국(덴버)" },
+  { value: "-06:00", label: "UTC-06:00 미국(시카고)" },
+  { value: "-05:00", label: "UTC-05:00 미국(뉴욕)" },
+  { value: "-04:00", label: "UTC-04:00 칠레(산티아고)" },
+  { value: "-03:00", label: "UTC-03:00 아르헨티나(부에노스아이레스)" },
+  { value: "-01:00", label: "UTC-01:00 카보베르데(프라이아)" },
+  { value: "+00:00", label: "UTC+00:00 영국(런던)" },
+  { value: "+01:00", label: "UTC+01:00 독일(베를린)" },
+  { value: "+01:00", label: "UTC+01:00 알제리(알제)" },
+  { value: "+02:00", label: "UTC+02:00 이집트(카이로)" },
+  { value: "+03:00", label: "UTC+03:00 탄자니아(다르에스살람)" },
+  { value: "+03:30", label: "UTC+03:30 이란(테헤란)" },
+  { value: "+04:00", label: "UTC+04:00 아랍에미리트(두바이)" },
+  { value: "+04:30", label: "UTC+04:30 아프가니스탄(카불)" },
+  { value: "+05:00", label: "UTC+05:00 파키스탄(이슬라마바드)" },
+  { value: "+05:30", label: "UTC+05:30 인도(뉴델리)" },
+  { value: "+05:45", label: "UTC+05:45 네팔(카트만두)" },
+  { value: "+06:00", label: "UTC+06:00 방글라데시(다카)" },
+  { value: "+06:30", label: "UTC+06:30 미얀마(양곤)" },
+  { value: "+07:00", label: "UTC+07:00 태국(방콕)" },
+  { value: "+08:00", label: "UTC+08:00 중국(베이징)" },
+  { value: "+09:00", label: "UTC+09:00 대한민국(서울)" },
+  { value: "+09:00", label: "UTC+09:00 일본(도쿄)" },
+  { value: "+09:30", label: "UTC+09:30 호주(애들레이드)" },
+  { value: "+10:00", label: "UTC+10:00 호주(시드니)" },
+  { value: "+11:00", label: "UTC+11:00 솔로몬제도(호니아라)" },
+  { value: "+12:00", label: "UTC+12:00 뉴질랜드(오클랜드)" },
+  { value: "+13:00", label: "UTC+13:00 사모아(아피아)" },
+  { value: "+14:00", label: "UTC+14:00 키리바시(라인제도)" }
 ];
+
 
 
 function populateOffsets() {
   const left = document.getElementById('utc-offset-left');
   const right = document.getElementById('utc-offset-right');
   offsets.forEach(o => {
-    const text = `UTC${o}`;
-    left.add(new Option(text, o));
-    right.add(new Option(text, o));
+    left.add(new Option(o.label, o.value));
+    right.add(new Option(o.label, o.value));
   });
   // 기본값: 한국(UTC+09:00), 탄자니아(UTC+03:00)
   left.value = "+09:00";
   right.value = "+03:00";
 }
 populateOffsets();
+

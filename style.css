@@ -174,29 +174,35 @@ body {
 
 
 
-
-
-
-
 #timeFormatForm {
   display: flex;
   flex-direction: column;
+  align-items: stretch; /* 모든 행이 form 너비와 같아짐 */
+  width: 100%;          /* 부모 박스 기준, 필요시 고정 px로 지정도 가능 */
 }
 
-.option-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.option-row {
+.option-row, .option-actions {
   display: flex;
   align-items: center;
+  width: 100%;                /* 모든 행의 너비 통일 */
+  box-sizing: border-box;
+  min-width: 320px;           /* 최소 너비, 필요시 조정 */
 }
 
+/* 옵션 행: 왼쪽 정렬 */
+.option-row {
+  justify-content: flex-start;
+}
+
+/* 버튼 행: 오른쪽 정렬 */
+.option-actions {
+  justify-content: flex-end;
+}
+
+/* 라벨 크기 동일하게 */
 .option-label {
   display: inline-block;
-  min-width: 130px; /* 두 라벨 동일폭 */
+  min-width: 130px;
   font-size: 16px;
   font-weight: bold;
   margin-right: 12px;
@@ -205,28 +211,24 @@ body {
   white-space: nowrap;
 }
 
+/* 옵션 내용 */
 .option-content {
   display: flex;
   align-items: center;
   gap: 10px;
   flex: 1 1 auto;
+  justify-content: flex-start;
 }
 
-.compare-inline-group {
-  display: flex;
-  gap: 16px;
+/* 셀렉트박스, 버튼 스타일은 그대로 */
+select {
+  padding: 6px 12px;
+  font-size: 15px;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  background: #34363c;
+  color: #fff;
 }
-.compare-group {
-  display: flex;
-  gap: 8px;
-}
-
-.option-actions {
-  display: flex;
-  justify-content: flex-end; /* 오른쪽 정렬 */
-  margin-top: 16px;
-}
-
 .apply-button {
   background-color: #3498db;
   color: #fff;
@@ -239,12 +241,4 @@ body {
 }
 .apply-button:hover {
   background: #217dbb;
-}
-select {
-  padding: 6px 12px;
-  font-size: 15px;
-  border-radius: 4px;
-  border: 1px solid #aaa;
-  background: #34363c;
-  color: #fff;
 }
