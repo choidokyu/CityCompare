@@ -166,35 +166,55 @@ body {
 
 
 
+
 #timeFormatForm {
   display: flex;
   flex-direction: column;
-  gap: 0; /* row 간 간격은 option-row마다 margin-top으로 조절 */
+  gap: 0;
 }
 
 .option-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.option-label {
+  display: inline-block;
+  min-width: 130px;  /* 라벨 너비 고정 (둘 다 동일) */
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 12px;
+  letter-spacing: 1px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 auto;
 }
 
 .compare-inline-group {
   display: flex;
   gap: 16px;
 }
-
 .compare-group {
   display: flex;
   gap: 8px;
 }
 
-.label {
-  font-size: 16px;
-  font-weight: bold;
-  margin-right: 10px;
-  letter-spacing: 1px;
-  white-space: nowrap;
+.apply-row {
+  margin-top: 16px;
 }
+
+.apply-row .option-content {
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .apply-button {
   background-color: #3498db;
   color: #fff;
