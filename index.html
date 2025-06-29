@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>World Clock - 24h</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #282c34;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    .clock-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 0;
+    }
+    .clock-board {
+      width: 90%;
+      background-color: #3a3f47;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .clock-content {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+    }
+    .clock-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50%;
+      position: relative;
+    }
+    .clock-wrapper {
+      position: relative;
+      width: 80%;
+      aspect-ratio: 1 / 1;
+    }
+    .clock {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 5px solid white;
+      border-radius: 50%;
+      background-size: 90%;
+      /*background-repeat: no-repeat;*/
+      background-position: center;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+    .ko {
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/300px-Flag_of_South_Korea.svg.png');
+    }
+    .tz {
+      background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Flag_of_Tanzania.svg/300px-Flag_of_Tanzania.svg.png');
+    }
+    .hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      transition: transform 0.05s ease-in-out;
+    }
+    .hour {
+      width: 6px;
+      height: 30%;
+      background: #787878;
+    }
+    .minute {
+      width: 4px;
+      height: 45%;
+      background: black;
+    }
+    .second {
+      width: 2px;
+      height: 45%;
+      background: red;
+      transition: none; /* ← 이것만 추가하면 깜빡임 해결됩니다 */
+    }
+    .center {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: black;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .circular-text {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .circular-text text {
+      font-size: 10px;
+      font-family: Arial;
+    }
+    .round-button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      border-radius: 50px;
+      display: block;
+      margin-left: auto;
+    }
+    .round-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="clock-body" id="compare">
+    <div class="clock-board">
+      <div class="clock-content">
+        <!-- 한국 시계 -->
+        <div class="clock-container">
+          <div class="clock-wrapper">
+            <div class="clock ko">
+              <div class="hand hour" id="korea-hour-hand"></div>
+              <div class="hand minute" id="korea-minute-hand"></div>
+              <div class="hand second" id="korea-second-hand"></div>
+              <div class="center"></div>
+            </div>
+            <svg class="circular-text" viewBox="0 0 200 200">
+              <defs>
+                <path id="circlePath-korea-numbers" d="M101,101 m -90,0 a 90,90 0 1,1 180,0 a 90,90 0 1,1 -180,0" transform="rotate(103 101 101)" />
+                <path id="circlePath-korea-label" d="M101,101 m -80,0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+              </defs>
+              <text id="korea-numbers"></text>
+              <text fill="dodgerblue">
+                <textPath id="korea-textpath" xlink:href="#circlePath-korea-label" startOffset="25%" text-anchor="middle">
+                  KOREA | LOADING...
+                </textPath>
+              </text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- 탄자니아 시계 -->
+        <div class="clock-container">
+          <div class="clock-wrapper">
+            <div class="clock tz">
+              <div class="hand hour" id="tanzania-hour-hand"></div>
+              <div class="hand minute" id="tanzania-minute-hand"></div>
+              <div class="hand second" id="tanzania-second-hand"></div>
+              <div class="center"></div>
+            </div>
+            <svg class="circular-text" viewBox="0 0 200 200">
+              <defs>
+                <path id="circlePath-tanzania-numbers" d="M101,101 m -90,0 a 90,90 0 1,1 180,0 a 90,90 0 1,1 -180,0" transform="rotate(103 101 101)" />
+                <path id="circlePath-tz-label" d="M101,101 m -80,0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
+              </defs>
+              <text id="tanzania-numbers"></text>
+              <text fill="white">
+                <textPath id="tanzania-textpath" xlink:href="#circlePath-tz-label" startOffset="25%" text-anchor="middle">
+                  TANZANIA | LOADING...
+                </textPath>
+              </text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <button class="round-button" onclick="fnButton()">확장&원복</button> 
+    </div>
+  </div>
+
+  <script>
+    function updateClocks() {
+      const now = new Date();
+      const nowKorea = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Seoul" }));
+      const nowTanzania = new Date(now.toLocaleString("en-US", { timeZone: "Africa/Dar_es_Salaam" }));
+      updateClock(nowKorea, "korea", "KOREA");
+      updateClock(nowTanzania, "tanzania", "TANZANIA");
+    }
+
+    function updateClock(time, region, label) {
+      const seconds = time.getSeconds();
+      const minutes = time.getMinutes();
+      const hours = time.getHours();
+
+      const secondDeg = (seconds / 60) * 360;
+      const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
+      const hourDeg = (hours / 24) * 360 + (minutes / 60) * 15;
+
+      document.getElementById(`${region}-second-hand`).style.transform = `rotate(${secondDeg}deg)`;
+      document.getElementById(`${region}-minute-hand`).style.transform = `rotate(${minuteDeg}deg)`;
+      document.getElementById(`${region}-hour-hand`).style.transform = `rotate(${hourDeg}deg)`;
+
+      const dateStr = `${time.getFullYear()}/${String(time.getMonth() + 1).padStart(2, '0')}/${String(time.getDate()).padStart(2, '0')}`;
+      const timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      document.getElementById(`${region}-textpath`).textContent = `${label} | ${dateStr} | ${timeStr}`;
+    }
+
+    function generateNumbers(region) {
+      const svgNS = "http://www.w3.org/2000/svg";
+      const xlinkNS = "http://www.w3.org/1999/xlink";
+      const container = document.getElementById(`${region}-numbers`);
+      const pathId = `#circlePath-${region}-numbers`;
+
+      // ✅ 숫자 색상 고정
+      const color = region === "korea" ? "dodgerblue" : "white";
+
+      for (let i = 1; i <= 24; i++) {
+        const textPath = document.createElementNS(svgNS, "textPath");
+        textPath.setAttributeNS(xlinkNS, "xlink:href", pathId);
+        textPath.setAttribute("startOffset", `${((i - 1) * 100 / 24).toFixed(4)}%`);
+        textPath.setAttribute("text-anchor", "middle");
+        textPath.setAttribute("fill", color); // ✅ 고정 색상 적용
+        textPath.textContent = i;
+        container.appendChild(textPath);
+      }
+    }
+
+
+    generateNumbers("korea");
+    generateNumbers("tanzania");
+
+    setInterval(updateClocks, 1000);
+    updateClocks();
+
+    function fnButton() {
+      const compareDiv = document.getElementById('compare');
+      if (!document.fullscreenElement) {
+        compareDiv.requestFullscreen?.();
+        compareDiv.webkitRequestFullscreen?.();
+        compareDiv.msRequestFullscreen?.();
+      } else {
+        document.exitFullscreen?.();
+        document.webkitExitFullscreen?.();
+        document.msExitFullscreen?.();
+      }
+    }
+  </script>
+</body>
+</html>
