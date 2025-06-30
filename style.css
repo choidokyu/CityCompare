@@ -38,20 +38,39 @@ body {
   aspect-ratio: 1 / 1;
   padding: 40px;
 }
+
 .clock {
-  /*position: absolute;*/
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  top: 0;
-  left: 0;
-  background-size: 90%;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   border: 5px solid white;
-  z-index: 1;
+  box-shadow:
+    0 4px 40px 0 rgba(0,0,0,0.30),
+    inset 10px 0 40px rgba(255,255,255,0.24),
+    inset -20px 0 40px rgba(0,0,0,0.19);
+  filter: brightness(0.95) contrast(1.07) saturate(1.08);
+  background-blend-mode: multiply;
+  position: relative;
+  overflow: hidden;
 }
+
+.clock::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 18%;
+  top: 16%;
+  width: 32%;
+  height: 24%;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.38) 60%, transparent 100%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+}
+
 .clock-outline {
   width: 100%;
   height: 100%;

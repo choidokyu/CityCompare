@@ -356,6 +356,11 @@ function refreshAllClocksAndNumbers() {
   renderBigNumbers('tanzania', hourFormat, tanzaniaOffset, koreaOffset);
   setClockFlag("korea", offsetLeft);
   setClockFlag("tanzania", offsetRight);
+
+  // 🟢 offset 변경시마다 3D 국기도 새로 그림
+  createFlagGlobe('globe-korea', offsetLeft);
+  createFlagGlobe('globe-tanzania', offsetRight);
+
   updateClocksAndBar();
 }
 refreshAllClocksAndNumbers();
@@ -369,3 +374,71 @@ document.getElementById("timeFormatForm").addEventListener("submit", function(e)
   hourFormat = parseInt(selected);
   refreshAllClocksAndNumbers();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function createFlagGlobe(divId, offsetStr) {
+  // offsets 배열에서 해당 offset 값 찾기
+  const found = offsets.find(o => o.value === offsetStr);
+  if (!found) return;
+
+  const flagUrl = found.img; // offsets에 정의된 국기 이미지 경로 사용
+
+  const width = 120, height = 120;
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(width, height);
+  renderer.setClearColor(0x000000, 0);
+  document.getElementById(divId).innerHTML = ""; // globe 새로 그릴 때 이전 globe 비움
+  document.getElementById(divId).appendChild(renderer.domElement);
+
+  const light = new THREE.DirectionalLight(0xffffff, 1.1);
+  light.position.set(5, 3, 5);
+  scene.add(light);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambient);
+
+  const loader = new THREE.TextureLoader();
+  loader.load(flagUrl, function(texture) {
+    const geometry = new THREE.SphereGeometry(1, 48, 48);
+    const material = new THREE.MeshPhongMaterial({
+      map: texture,
+      shininess: 45,
+      specular: 0xdddddd,
+    });
+    const sphere = new THREE.Mesh(geometry, material);
+    scene.add(sphere);
+
+    camera.position.z = 3.2;
+    function animate() {
+      requestAnimationFrame(animate);
+      sphere.rotation.y += 0.007;
+      renderer.render(scene, camera);
+    }
+    animate();
+  });
+}
+
+// 국기 이미지 주소(고해상 PNG 권장, SVG는 크롬만 지원)
+// createFlagGlobe('globe-korea', 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/512px-Flag_of_South_Korea.svg.png');
+// createFlagGlobe('globe-tanzania', 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Flag_of_Tanzania.svg/512px-Flag_of_Tanzania.svg.png');
+
+// createFlagGlobe( 'globe-korea', offsetLeft );
+// createFlagGlobe( 'globe-tanzania', offsetRight );

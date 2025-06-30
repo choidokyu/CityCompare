@@ -38,15 +38,6 @@ let hourFormat = 12;
 let offsetLeft = "+09:00";
 let offsetRight = "+03:00";
 
-// 오프셋 파싱: "+09:00" → 9, "-03:30" → -3.5
-function parseOffsetStr(offsetStr) {
-  const m = offsetStr.match(/([+-])(\d{2}):(\d{2})/);
-  if (!m) return 0;
-  const sign = m[1] === "-" ? -1 : 1;
-  const hour = parseInt(m[2], 10);
-  const min = parseInt(m[3], 10);
-  return sign * (hour + min / 60);
-}
 
 // 시계 업데이트
 function updateClocks() {
@@ -108,7 +99,7 @@ function generateNumbers(region, hourFormat) {
     textPath.setAttribute("paint-order", "stroke fill");
     textPath.setAttribute("stroke-linejoin", "round");
     if (i === 0) {
-        textPath.setAttribute("startOffset", `0.5%`);
+        textPath.setAttribute("startOffset", `0.6%`);
         textPath.textContent = hourFormat;
     } else {
         textPath.textContent = i;
@@ -267,3 +258,114 @@ updateClocksAndBar();
 function fnButton() {
   alert("확장/원복 기능 구현 필요");
 }
+
+
+
+
+// // 오프셋 파싱: "+09:00" → 9, "-03:30" → -3.5
+// function parseOffsetStr(offsetStr) {
+//   const m = offsetStr.match(/([+-])(\d{2}):(\d{2})/);
+//   if (!m) return 0;
+//   const sign = m[1] === "-" ? -1 : 1;
+//   const hour = parseInt(m[2], 10);
+//   const min = parseInt(m[3], 10);
+//   return sign * (hour + min / 60);
+// }
+
+// UTC offset 문자열을 소수점 시간으로 변환 (+09:30 -> 9.5 등)
+function parseOffsetStr(offset) {
+  let sign = offset.startsWith('-') ? -1 : 1;
+  let parts = offset.replace(/^[+-]/, '').split(':');
+  let hours = parseInt(parts[0], 10);
+  let minutes = parseInt(parts[1] || "0", 10);
+  return sign * (hours + minutes / 60);
+}
+
+
+
+function renderBigNumbers(region, hourFormat, baseOffset, compareOffset) {
+  const g = document.getElementById(`clock-big-numbers-${region}`);
+  if (!g) return;
+  g.innerHTML = "";
+
+  const cx = 105, cy = 105;
+  const r = 100;
+  const count = hourFormat;
+
+  let fontSize = hourFormat === 12 ? 8 : 8;
+
+  // 시차 계산
+  // compareOffset이 baseOffset보다 몇 시간 느린지(또는 빠른지)
+  let diff = compareOffset - baseOffset;
+
+  for (let i = 0; i < count; i++) {
+    // "내" 시계 기준 0~23(또는 1~12)번째 숫자가 "상대방" 시계 기준 몇 시인지
+    // 예: 8번째(오전 8시)라면, 반대편 도시는 (8+시차) % 24
+
+    // 기준이 되는 시간 (0~23, 1~12)
+    let display;
+    if (hourFormat === 12) {
+      let myHour = (i === 0 ? 12 : i);  // 원형 숫자 12,1,2,3...
+      let otherHour = (myHour + diff + 12 - 1) % 12 + 1; // 1~12로 보정
+      display = otherHour;
+    } else {
+      let myHour = i;  // 0~23
+      let otherHour = (myHour + diff + 24) % 24;
+      display = otherHour;
+    }
+
+    let base = (hourFormat === 12) ? 3 : 6;
+    let angle = ((i - base) / count) * 2 * Math.PI;
+    let x = cx + r * Math.cos(angle);
+    let y = cy + r * Math.sin(angle);
+    let deg = angle * 180 / Math.PI + 90;
+
+    g.innerHTML += `
+      <text 
+        x="${x}" y="${y}" 
+        text-anchor="middle" 
+        dominant-baseline="middle"
+        font-size="${fontSize}"
+        fill="#005cbf" stroke="#fff" stroke-width="0.7"
+        paint-order="stroke fill" font-family="Arial"
+        transform="rotate(${deg} ${x} ${y})"
+      >${display}</text>
+    `;
+  }
+}
+
+
+
+
+
+
+
+
+// ...나머지 시계/옵션 처리 함수들...
+// 시계 생성, 업데이트 부분 등 기존과 동일
+
+// 최초 실행 및 시간제 바뀔 때 호출:
+function refreshAllClocksAndNumbers() {
+  // 항상 최신 값으로 offset 계산!
+  let koreaOffset = parseOffsetStr(offsetLeft);
+  let tanzaniaOffset = parseOffsetStr(offsetRight);
+
+  generateNumbers("korea", hourFormat);
+  generateNumbers("tanzania", hourFormat);
+  renderBigNumbers('korea', hourFormat, koreaOffset, tanzaniaOffset);
+  renderBigNumbers('tanzania', hourFormat, tanzaniaOffset, koreaOffset);
+  setClockFlag("korea", offsetLeft);
+  setClockFlag("tanzania", offsetRight);
+  updateClocksAndBar();
+}
+refreshAllClocksAndNumbers();
+
+
+
+
+document.getElementById("timeFormatForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const selected = document.querySelector('input[name="hour-format"]:checked').value;
+  hourFormat = parseInt(selected);
+  refreshAllClocksAndNumbers();
+});
