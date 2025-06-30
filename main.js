@@ -108,14 +108,14 @@ function generateNumbers(region, hourFormat) {
   }
 }
 
-function setClockFlag(region, offset) {
-  const found = offsets.find(o => o.value === offset);
-  if (!found) return;
-  const clockDiv = document.querySelector(`.clock.${region === 'korea' ? 'ko' : 'tz'}`);
-  if (clockDiv) {
-    clockDiv.style.backgroundImage = `url('${found.img}')`;
-  }
-}
+// function setClockFlag(region, offset) {
+//   const found = offsets.find(o => o.value === offset);
+//   if (!found) return;
+//   const clockDiv = document.querySelector(`.clock.${region === 'korea' ? 'ko' : 'tz'}`);
+//   if (clockDiv) {
+//     clockDiv.style.backgroundImage = `url('${found.img}')`;
+//   }
+// }
 
 function buildMapCustomSelect(targetId, hiddenId, defaultValue, regionKey) {
   const container = document.getElementById(targetId);
@@ -135,10 +135,10 @@ function buildMapCustomSelect(targetId, hiddenId, defaultValue, regionKey) {
       selected.classList.remove('active');
       if (regionKey === 'left') {
         offsetLeft = o.value;
-        setClockFlag("korea", offsetLeft);
+        //setClockFlag("korea", offsetLeft);
       } else {
         offsetRight = o.value;
-        setClockFlag("tanzania", offsetRight);
+        //setClockFlag("tanzania", offsetRight);
       }
       updateClocksAndBar();
     };
@@ -174,8 +174,8 @@ document.getElementById("timeFormatForm").addEventListener("submit", function(e)
 
 generateNumbers("korea", hourFormat);
 generateNumbers("tanzania", hourFormat);
-setClockFlag("korea", offsetLeft);
-setClockFlag("tanzania", offsetRight);
+// setClockFlag("korea", offsetLeft);
+// setClockFlag("tanzania", offsetRight);
 
 // --------- [여기서부터 타임라인 compare bar 8번째 칸 고정 기능 적용] ---------
 
@@ -352,10 +352,12 @@ function refreshAllClocksAndNumbers() {
 
   generateNumbers("korea", hourFormat);
   generateNumbers("tanzania", hourFormat);
+
   renderBigNumbers('korea', hourFormat, koreaOffset, tanzaniaOffset);
   renderBigNumbers('tanzania', hourFormat, tanzaniaOffset, koreaOffset);
-  setClockFlag("korea", offsetLeft);
-  setClockFlag("tanzania", offsetRight);
+
+  // setClockFlag("korea", offsetLeft);
+  // setClockFlag("tanzania", offsetRight);
 
   // 🟢 offset 변경시마다 3D 국기도 새로 그림
   createFlagGlobe('globe-korea', offsetLeft);
