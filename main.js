@@ -395,20 +395,30 @@ document.getElementById("timeFormatForm").addEventListener("submit", function(e)
 
 
 function createFlagGlobe(divId, offsetStr) {
-  // offsets 배열에서 해당 offset 값 찾기
   const found = offsets.find(o => o.value === offsetStr);
   if (!found) return;
+  const flagUrl = found.img;
 
-  const flagUrl = found.img; // offsets에 정의된 국기 이미지 경로 사용
+  // 1. 대상 div의 크기를 동적으로 가져옴 (가장 안전)
+  const parent = document.getElementById(divId);
+  // 기본 fallback
+  let width = 220, height = 220; 
+  if (parent) {
+    width = parent.clientWidth || 220;
+    height = parent.clientHeight || 220;
+  }
 
-  const width = 120, height = 120;
+  // 2. globe의 반지름도 더 크게!
+  const radius = 1.25; // 기존 1에서 1.25~1.5까지 커도 잘 보임
+
+  // 기존 코드 유지, size만 변경
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, width/height, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setClearColor(0x000000, 0);
-  document.getElementById(divId).innerHTML = ""; // globe 새로 그릴 때 이전 globe 비움
-  document.getElementById(divId).appendChild(renderer.domElement);
+  parent.innerHTML = "";
+  parent.appendChild(renderer.domElement);
 
   const light = new THREE.DirectionalLight(0xffffff, 1.1);
   light.position.set(5, 3, 5);
@@ -419,7 +429,8 @@ function createFlagGlobe(divId, offsetStr) {
 
   const loader = new THREE.TextureLoader();
   loader.load(flagUrl, function(texture) {
-    const geometry = new THREE.SphereGeometry(1, 48, 48);
+    // radius 값을 크게
+    const geometry = new THREE.SphereGeometry(radius, 48, 48);
     const material = new THREE.MeshPhongMaterial({
       map: texture,
       shininess: 45,
@@ -437,6 +448,7 @@ function createFlagGlobe(divId, offsetStr) {
     animate();
   });
 }
+
 
 // 국기 이미지 주소(고해상 PNG 권장, SVG는 크롬만 지원)
 // createFlagGlobe('globe-korea', 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/512px-Flag_of_South_Korea.svg.png');
