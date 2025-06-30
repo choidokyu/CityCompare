@@ -392,33 +392,27 @@ document.getElementById("timeFormatForm").addEventListener("submit", function(e)
 
 
 
-
-
 function createFlagGlobe(divId, offsetStr) {
   const found = offsets.find(o => o.value === offsetStr);
   if (!found) return;
   const flagUrl = found.img;
-
-  // 1. 대상 div의 크기를 동적으로 가져옴 (가장 안전)
   const parent = document.getElementById(divId);
-  // 기본 fallback
-  let width = 220, height = 220; 
-  if (parent) {
-    width = parent.clientWidth || 220;
-    height = parent.clientHeight || 220;
-  }
+  let width = parent.clientWidth || 220;
+  let height = parent.clientHeight || 220;
 
-  // 2. globe의 반지름도 더 크게!
-  const radius = 1.25; // 기존 1에서 1.25~1.5까지 커도 잘 보임
+  // 기존 globe canvas가 있으면 삭제
+  const oldCanvas = parent.querySelector('canvas');
+  if (oldCanvas) parent.removeChild(oldCanvas);
 
-  // 기존 코드 유지, size만 변경
+  const radius = 1.25;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(width, height);
   renderer.setClearColor(0x000000, 0);
-  parent.innerHTML = "";
-  parent.appendChild(renderer.domElement);
+
+  // [수정] 기존 appendChild → insertBefore(맨 아래에!)
+  parent.insertBefore(renderer.domElement, parent.firstChild);
 
   const light = new THREE.DirectionalLight(0xffffff, 1.1);
   light.position.set(5, 3, 5);
@@ -429,7 +423,6 @@ function createFlagGlobe(divId, offsetStr) {
 
   const loader = new THREE.TextureLoader();
   loader.load(flagUrl, function(texture) {
-    // radius 값을 크게
     const geometry = new THREE.SphereGeometry(radius, 48, 48);
     const material = new THREE.MeshPhongMaterial({
       map: texture,
@@ -448,6 +441,7 @@ function createFlagGlobe(divId, offsetStr) {
     animate();
   });
 }
+
 
 
 // 국기 이미지 주소(고해상 PNG 권장, SVG는 크롬만 지원)
