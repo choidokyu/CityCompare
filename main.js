@@ -38,15 +38,6 @@ let hourFormat = 12;
 let offsetLeft = "+09:00";
 let offsetRight = "+03:00";
 
-// // 오프셋 파싱: "+09:00" → 9, "-03:30" → -3.5
-// function parseOffsetStr(offsetStr) {
-//   const m = offsetStr.match(/([+-])(\d{2}):(\d{2})/);
-//   if (!m) return 0;
-//   const sign = m[1] === "-" ? -1 : 1;
-//   const hour = parseInt(m[2], 10);
-//   const min = parseInt(m[3], 10);
-//   return sign * (hour + min / 60);
-// }
 
 // 시계 업데이트
 function updateClocks() {
@@ -271,6 +262,16 @@ function fnButton() {
 
 
 
+// // 오프셋 파싱: "+09:00" → 9, "-03:30" → -3.5
+// function parseOffsetStr(offsetStr) {
+//   const m = offsetStr.match(/([+-])(\d{2}):(\d{2})/);
+//   if (!m) return 0;
+//   const sign = m[1] === "-" ? -1 : 1;
+//   const hour = parseInt(m[2], 10);
+//   const min = parseInt(m[3], 10);
+//   return sign * (hour + min / 60);
+// }
+
 // UTC offset 문자열을 소수점 시간으로 변환 (+09:30 -> 9.5 등)
 function parseOffsetStr(offset) {
   let sign = offset.startsWith('-') ? -1 : 1;
@@ -280,98 +281,59 @@ function parseOffsetStr(offset) {
   return sign * (hours + minutes / 60);
 }
 
-// 12시간제 외곽 숫자 그리기 함수
-function renderBigNumbers12(region, offsetMe, offsetOther) {
+
+
+function renderBigNumbers(region, hourFormat, baseOffset, compareOffset) {
   const g = document.getElementById(`clock-big-numbers-${region}`);
   if (!g) return;
   g.innerHTML = "";
 
-  const cx = 105, cy = 105, r = 100;
-  const count = 12;
+  const cx = 105, cy = 105;
+  const r = 100;
+  const count = hourFormat;
 
-  let now = new Date();
-  let localHour24 = now.getHours();
-  let localHour = localHour24 % 12 || 12;
-  const posNow = (localHour === 0 ? count - 1 : localHour - 1);
+  let fontSize = hourFormat === 12 ? 8 : 8;
 
-  let timeDiffRawMe = parseOffsetStr(offsetMe);
-  let timeDiffRawOther = parseOffsetStr(offsetOther);
-  let timeDiff = timeDiffRawOther - timeDiffRawMe;
-  let roundedDiff = Math.round(timeDiff);
-
-  console.log(`renderBigNumbers12 - region: ${region}`);
-  console.log(`offsetMe: ${offsetMe} (${timeDiffRawMe}), offsetOther: ${offsetOther} (${timeDiffRawOther})`);
-  console.log(`timeDiff: ${timeDiff}, roundedDiff: ${roundedDiff}`);
-  console.log(`localHour24: ${localHour24}, localHour(12h): ${localHour}, posNow: ${posNow}`);
+  // 시차 계산
+  // compareOffset이 baseOffset보다 몇 시간 느린지(또는 빠른지)
+  let diff = compareOffset - baseOffset;
 
   for (let i = 0; i < count; i++) {
-    let shiftedPos = (i + roundedDiff + count - posNow) % count;
-    if (shiftedPos < 0) shiftedPos += count;
+    // "내" 시계 기준 0~23(또는 1~12)번째 숫자가 "상대방" 시계 기준 몇 시인지
+    // 예: 8번째(오전 8시)라면, 반대편 도시는 (8+시차) % 24
 
-    let num = shiftedPos === 0 ? 12 : shiftedPos;
-    let ampm = (shiftedPos >= 0 && shiftedPos < 12) ? "AM" : "PM";
+    // 기준이 되는 시간 (0~23, 1~12)
+    let display;
+    if (hourFormat === 12) {
+      let myHour = (i === 0 ? 12 : i);  // 원형 숫자 12,1,2,3...
+      let otherHour = (myHour + diff + 12 - 1) % 12 + 1; // 1~12로 보정
+      display = otherHour;
+    } else {
+      let myHour = i;  // 0~23
+      let otherHour = (myHour + diff + 24) % 24;
+      display = otherHour;
+    }
 
-    console.log(`i: ${i}, shiftedPos: ${shiftedPos}, num: ${num}, ampm: ${ampm}`);
-
-    let angle = ((i - 3) / count) * 2 * Math.PI;
+    let base = (hourFormat === 12) ? 3 : 6;
+    let angle = ((i - base) / count) * 2 * Math.PI;
     let x = cx + r * Math.cos(angle);
-    let y = cy + r * Math.sin(angle) + 5;
+    let y = cy + r * Math.sin(angle);
+    let deg = angle * 180 / Math.PI + 90;
 
     g.innerHTML += `
-      <text x="${x}" y="${y}" text-anchor="middle" font-size="8"
-        fill="#005cbf" stroke="#fff" stroke-width="1"
-        paint-order="stroke fill" font-family="Arial">
-        ${num}${ampm}
-      </text>`;
+      <text 
+        x="${x}" y="${y}" 
+        text-anchor="middle" 
+        dominant-baseline="middle"
+        font-size="${fontSize}"
+        fill="#005cbf" stroke="#fff" stroke-width="0.7"
+        paint-order="stroke fill" font-family="Arial"
+        transform="rotate(${deg} ${x} ${y})"
+      >${display}</text>
+    `;
   }
 }
 
-
-// 24시간제 외곽 숫자 그리기 함수
-function renderBigNumbers24(region, offsetMe, offsetOther) {
-  const g = document.getElementById(`clock-big-numbers-${region}`);
-  if (!g) return;
-  g.innerHTML = "";
-
-  const cx = 105, cy = 105, r = 100;
-  const count = 24;
-
-  let now = new Date();
-  let localHour = now.getHours();
-  const posNow = (localHour === 0 ? count - 1 : localHour - 1);
-
-  let timeDiff = parseOffsetStr(offsetOther) - parseOffsetStr(offsetMe);
-  let roundedDiff = Math.round(timeDiff);
-
-  for (let i = 0; i < count; i++) {
-    let shiftedPos = (i + roundedDiff + count - posNow) % count;
-    if (shiftedPos < 0) shiftedPos += count;
-
-    let num = shiftedPos;
-
-    let angle = ((i - 3) / count) * 2 * Math.PI;
-    let x = cx + r * Math.cos(angle);
-    let y = cy + r * Math.sin(angle) + 5;
-
-    g.innerHTML += `
-      <text x="${x}" y="${y}" text-anchor="middle" font-size="6"
-        fill="#005cbf" stroke="#fff" stroke-width="1"
-        paint-order="stroke fill" font-family="Arial">
-        ${num}
-      </text>`;
-  }
-}
-
-// 시간제에 따라 12/24시간제 분기 호출 함수
-function renderBigNumbers(region, hourFormat, offsetMe, offsetOther) {
-  if (hourFormat === 12) {
-    renderBigNumbers12(region, offsetMe, offsetOther);
-  } else if (hourFormat === 24) {
-    renderBigNumbers24(region, offsetMe, offsetOther);
-  } else {
-    console.warn("Unsupported hourFormat:", hourFormat);
-  }
-}
 
 
 
@@ -384,10 +346,14 @@ function renderBigNumbers(region, hourFormat, offsetMe, offsetOther) {
 
 // 최초 실행 및 시간제 바뀔 때 호출:
 function refreshAllClocksAndNumbers() {
+  // 항상 최신 값으로 offset 계산!
+  let koreaOffset = parseOffsetStr(offsetLeft);
+  let tanzaniaOffset = parseOffsetStr(offsetRight);
+
   generateNumbers("korea", hourFormat);
   generateNumbers("tanzania", hourFormat);
-  renderBigNumbers('korea', hourFormat, offsetLeft, offsetRight);
-  renderBigNumbers('tanzania', hourFormat, offsetRight, offsetLeft);
+  renderBigNumbers('korea', hourFormat, koreaOffset, tanzaniaOffset);
+  renderBigNumbers('tanzania', hourFormat, tanzaniaOffset, koreaOffset);
   setClockFlag("korea", offsetLeft);
   setClockFlag("tanzania", offsetRight);
   updateClocksAndBar();
