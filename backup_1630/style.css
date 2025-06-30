@@ -36,38 +36,21 @@ body {
   position: relative;
   width: 80%;
   aspect-ratio: 1 / 1;
-  padding: 40px;
 }
 .clock {
-  /*position: absolute;*/
+  position: absolute;
   width: 100%;
   height: 100%;
+  border: 5px solid white;
   border-radius: 50%;
-  top: 0;
-  left: 0;
-  background-size: 90%;
+  /*background-size: 90%;*/
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border: 5px solid white;
+  top: 0;
+  left: 0;
   z-index: 1;
 }
-.clock-outline {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  left: 0; top: 0;
-  user-select: none;
-  font-family: Arial, sans-serif;
-  pointer-events: none;
-}
-
-.clock-outline text {
-  user-select: none;
-  font-family: Arial, sans-serif;
-  pointer-events: none;
-}
-
 .ko {
   background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/300px-Flag_of_South_Korea.svg.png');
 }

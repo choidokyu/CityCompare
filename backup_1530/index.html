@@ -10,10 +10,8 @@
   <div class="clock-body" id="compare">
     <div class="clock-board">
       <div class="clock-content">
-        
-        <!-- left -->
+        <!-- 한국 시계 -->
         <div class="clock-container">
-
           <div class="clock-wrapper">
             <div class="clock ko">
               <div class="hand hour" id="korea-hour-hand"></div>
@@ -21,20 +19,13 @@
               <div class="hand second" id="korea-second-hand"></div>
               <div class="center"></div>
             </div>
-
-            <!-- 외곽 원 + 큰 숫자 -->
-            <svg class="clock-outline" viewBox="0 0 210 210">
-              <circle cx="105" cy="105" r="104" fill="none" stroke="#00bfff" stroke-width="3"/>
-              <g id="clock-big-numbers-korea"></g>
-            </svg>
-
             <svg class="circular-text" viewBox="0 0 200 200">
               <defs>
-                <path id="circlePath-korea-numbers" d="M101,101 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" transform="rotate(90 101 101)" />
-                <path id="circlePath-korea-label" d="M101,101 m -65,0 a 65,65 0 1,1 130,0 a 65,65 0 1,1 -130,0" />
+                <path id="circlePath-korea-numbers" d="M101,101 m -90,0 a 90,90 0 1,1 180,0 a 90,90 0 1,1 -180,0" transform="rotate(90 101 101)" />
+                <path id="circlePath-korea-label" d="M101,101 m -80,0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
               </defs>
               <text id="korea-numbers"></text>
-              <text fill="white" stroke="black" stroke-width="2" paint-order="stroke fill" stroke-linejoin="round">
+              <text fill="dodgerblue">
                 <textPath id="korea-textpath" href="#circlePath-korea-label" startOffset="25%" text-anchor="middle">
                   KOREA | LOADING...
                 </textPath>
@@ -42,8 +33,8 @@
             </svg>
           </div>
         </div>
-        
-        <!-- right -->
+
+        <!-- 탄자니아 시계 -->
         <div class="clock-container">
           <div class="clock-wrapper">
             <div class="clock tz">
@@ -52,19 +43,13 @@
               <div class="hand second" id="tanzania-second-hand"></div>
               <div class="center"></div>
             </div>
-
-            <svg class="clock-outline" viewBox="0 0 210 210">
-              <circle cx="105" cy="105" r="104" fill="none" stroke="#00bfff" stroke-width="3"/>
-              <g id="clock-big-numbers-tanzania"></g>
-            </svg>
-
             <svg class="circular-text" viewBox="0 0 200 200">
               <defs>
-                <path id="circlePath-tanzania-numbers" d="M101,101 m -78,0 a 78,78 0 1,1 156,0 a 78,78 0 1,1 -156,0" transform="rotate(90 101 101)" />
-                <path id="circlePath-tz-label" d="M101,101 m -65,0 a 65,65 0 1,1 130,0 a 65,65 0 1,1 -130,0" />
+                <path id="circlePath-tanzania-numbers" d="M101,101 m -90,0 a 90,90 0 1,1 180,0 a 90,90 0 1,1 -180,0" transform="rotate(90 101 101)" />
+                <path id="circlePath-tz-label" d="M101,101 m -80,0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" />
               </defs>
               <text id="tanzania-numbers"></text>
-              <text fill="white" stroke="black" stroke-width="2" paint-order="stroke fill" stroke-linejoin="round">
+              <text fill="white">
                 <textPath id="tanzania-textpath" href="#circlePath-tz-label" startOffset="25%" text-anchor="middle">
                   TANZANIA | LOADING...
                 </textPath>
@@ -72,18 +57,12 @@
             </svg>
           </div>
         </div>
-
       </div>
-
       <button class="round-button" onclick="fnButton()">확장&원복</button> 
     </div>
 
-    <!-- ...기존 clock-board 닫는 </div> 바로 아래에 추가... -->
-    <div class="timezone-compare-bar" id="timezone-compare-bar">
-      <!-- JS에서 두 줄(왼쪽/오른쪽 도시) 자동으로 채움 -->
-    </div>
 
-
+    
     <!-- 아래 옵션 박스 -->
     <div class="option-box">
       <form id="timeFormatForm">
@@ -96,21 +75,12 @@
           </div>
         </div>
 
-        <!-- UTC 오프셋 선택: 왼/오 각 커스텀 셀렉트 -->
+        <!-- UTC 오프셋 선택: 왼/오각각 -->
         <div class="option-row">
           <span class="option-label">UTC 오프셋:</span>
           <div class="option-content">
-            <div class="custom-select" id="utc-map-offset-left">
-              <div class="select-selected"></div>
-              <div class="select-items select-hide"></div>
-            </div>
-            <input type="hidden" id="utc-map-offset-value-left" value="+09:00" />
-
-            <div class="custom-select" id="utc-map-offset-right">
-              <div class="select-selected"></div>
-              <div class="select-items select-hide"></div>
-            </div>
-            <input type="hidden" id="utc-map-offset-value-right" value="+03:00" />
+            <select id="utc-offset-left"  title="왼쪽 시계의 UTC 오프셋 선택"></select>
+            <select id="utc-offset-right" title="오른쪽 시계의 UTC 오프셋 선택"></select>
           </div>
         </div>
 
@@ -120,7 +90,19 @@
         </div>
       </form>
     </div>
-  </div>
+
+
+    <div class="custom-select" id="utc-map-offset-custom">
+      <div class="select-selected">UTC+09:00 <img src="images/maps/kr-map.png" class="mini-map"> 대한민국(서울)</div>
+      <div class="select-items select-hide"></div>
+    </div>
+    <input type="hidden" id="utc-map-offset-value" value="+09:00" />
+
+
+
+
+
+
   <script src="main.js"></script>
 </body>
 </html>

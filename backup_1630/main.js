@@ -38,15 +38,15 @@ let hourFormat = 12;
 let offsetLeft = "+09:00";
 let offsetRight = "+03:00";
 
-// // 오프셋 파싱: "+09:00" → 9, "-03:30" → -3.5
-// function parseOffsetStr(offsetStr) {
-//   const m = offsetStr.match(/([+-])(\d{2}):(\d{2})/);
-//   if (!m) return 0;
-//   const sign = m[1] === "-" ? -1 : 1;
-//   const hour = parseInt(m[2], 10);
-//   const min = parseInt(m[3], 10);
-//   return sign * (hour + min / 60);
-// }
+// 오프셋 파싱: "+09:00" → 9, "-03:30" → -3.5
+function parseOffsetStr(offsetStr) {
+  const m = offsetStr.match(/([+-])(\d{2}):(\d{2})/);
+  if (!m) return 0;
+  const sign = m[1] === "-" ? -1 : 1;
+  const hour = parseInt(m[2], 10);
+  const min = parseInt(m[3], 10);
+  return sign * (hour + min / 60);
+}
 
 // 시계 업데이트
 function updateClocks() {
@@ -108,7 +108,7 @@ function generateNumbers(region, hourFormat) {
     textPath.setAttribute("paint-order", "stroke fill");
     textPath.setAttribute("stroke-linejoin", "round");
     if (i === 0) {
-        textPath.setAttribute("startOffset", `0.6%`);
+        textPath.setAttribute("startOffset", `0.5%`);
         textPath.textContent = hourFormat;
     } else {
         textPath.textContent = i;
@@ -267,139 +267,3 @@ updateClocksAndBar();
 function fnButton() {
   alert("확장/원복 기능 구현 필요");
 }
-
-
-
-
-// UTC offset 문자열을 소수점 시간으로 변환 (+09:30 -> 9.5 등)
-function parseOffsetStr(offset) {
-  let sign = offset.startsWith('-') ? -1 : 1;
-  let parts = offset.replace(/^[+-]/, '').split(':');
-  let hours = parseInt(parts[0], 10);
-  let minutes = parseInt(parts[1] || "0", 10);
-  return sign * (hours + minutes / 60);
-}
-
-// 12시간제 외곽 숫자 그리기 함수
-function renderBigNumbers12(region, offsetMe, offsetOther) {
-  const g = document.getElementById(`clock-big-numbers-${region}`);
-  if (!g) return;
-  g.innerHTML = "";
-
-  const cx = 105, cy = 105, r = 100;
-  const count = 12;
-
-  let now = new Date();
-  let localHour24 = now.getHours();
-  let localHour = localHour24 % 12 || 12;
-  const posNow = (localHour === 0 ? count - 1 : localHour - 1);
-
-  let timeDiffRawMe = parseOffsetStr(offsetMe);
-  let timeDiffRawOther = parseOffsetStr(offsetOther);
-  let timeDiff = timeDiffRawOther - timeDiffRawMe;
-  let roundedDiff = Math.round(timeDiff);
-
-  console.log(`renderBigNumbers12 - region: ${region}`);
-  console.log(`offsetMe: ${offsetMe} (${timeDiffRawMe}), offsetOther: ${offsetOther} (${timeDiffRawOther})`);
-  console.log(`timeDiff: ${timeDiff}, roundedDiff: ${roundedDiff}`);
-  console.log(`localHour24: ${localHour24}, localHour(12h): ${localHour}, posNow: ${posNow}`);
-
-  for (let i = 0; i < count; i++) {
-    let shiftedPos = (i + roundedDiff + count - posNow) % count;
-    if (shiftedPos < 0) shiftedPos += count;
-
-    let num = shiftedPos === 0 ? 12 : shiftedPos;
-    let ampm = (shiftedPos >= 0 && shiftedPos < 12) ? "AM" : "PM";
-
-    console.log(`i: ${i}, shiftedPos: ${shiftedPos}, num: ${num}, ampm: ${ampm}`);
-
-    let angle = ((i - 3) / count) * 2 * Math.PI;
-    let x = cx + r * Math.cos(angle);
-    let y = cy + r * Math.sin(angle) + 5;
-
-    g.innerHTML += `
-      <text x="${x}" y="${y}" text-anchor="middle" font-size="8"
-        fill="#005cbf" stroke="#fff" stroke-width="1"
-        paint-order="stroke fill" font-family="Arial">
-        ${num}${ampm}
-      </text>`;
-  }
-}
-
-
-// 24시간제 외곽 숫자 그리기 함수
-function renderBigNumbers24(region, offsetMe, offsetOther) {
-  const g = document.getElementById(`clock-big-numbers-${region}`);
-  if (!g) return;
-  g.innerHTML = "";
-
-  const cx = 105, cy = 105, r = 100;
-  const count = 24;
-
-  let now = new Date();
-  let localHour = now.getHours();
-  const posNow = (localHour === 0 ? count - 1 : localHour - 1);
-
-  let timeDiff = parseOffsetStr(offsetOther) - parseOffsetStr(offsetMe);
-  let roundedDiff = Math.round(timeDiff);
-
-  for (let i = 0; i < count; i++) {
-    let shiftedPos = (i + roundedDiff + count - posNow) % count;
-    if (shiftedPos < 0) shiftedPos += count;
-
-    let num = shiftedPos;
-
-    let angle = ((i - 3) / count) * 2 * Math.PI;
-    let x = cx + r * Math.cos(angle);
-    let y = cy + r * Math.sin(angle) + 5;
-
-    g.innerHTML += `
-      <text x="${x}" y="${y}" text-anchor="middle" font-size="6"
-        fill="#005cbf" stroke="#fff" stroke-width="1"
-        paint-order="stroke fill" font-family="Arial">
-        ${num}
-      </text>`;
-  }
-}
-
-// 시간제에 따라 12/24시간제 분기 호출 함수
-function renderBigNumbers(region, hourFormat, offsetMe, offsetOther) {
-  if (hourFormat === 12) {
-    renderBigNumbers12(region, offsetMe, offsetOther);
-  } else if (hourFormat === 24) {
-    renderBigNumbers24(region, offsetMe, offsetOther);
-  } else {
-    console.warn("Unsupported hourFormat:", hourFormat);
-  }
-}
-
-
-
-
-
-
-
-// ...나머지 시계/옵션 처리 함수들...
-// 시계 생성, 업데이트 부분 등 기존과 동일
-
-// 최초 실행 및 시간제 바뀔 때 호출:
-function refreshAllClocksAndNumbers() {
-  generateNumbers("korea", hourFormat);
-  generateNumbers("tanzania", hourFormat);
-  renderBigNumbers('korea', hourFormat, offsetLeft, offsetRight);
-  renderBigNumbers('tanzania', hourFormat, offsetRight, offsetLeft);
-  setClockFlag("korea", offsetLeft);
-  setClockFlag("tanzania", offsetRight);
-  updateClocksAndBar();
-}
-refreshAllClocksAndNumbers();
-
-
-
-
-document.getElementById("timeFormatForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const selected = document.querySelector('input[name="hour-format"]:checked').value;
-  hourFormat = parseInt(selected);
-  refreshAllClocksAndNumbers();
-});
