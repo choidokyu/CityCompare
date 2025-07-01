@@ -432,7 +432,7 @@ function createFlagGlobe(divId, offsetStr) {
     const sphere = new THREE.Mesh(geometry, material);
     scene.add(sphere);
 
-    camera.position.z = 5.0;
+    camera.position.z = 4.5;
     function animate() {
       requestAnimationFrame(animate);
       sphere.rotation.y += 0.007;
