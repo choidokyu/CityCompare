@@ -363,6 +363,10 @@ function refreshAllClocksAndNumbers() {
   createFlagGlobe('globe-korea', offsetLeft);
   createFlagGlobe('globe-tanzania', offsetRight);
 
+  observeResize('globe-korea', offsetLeft);
+  observeResize('globe-tanzania', offsetRight);
+
+
   updateClocksAndBar();
 }
 refreshAllClocksAndNumbers();
@@ -384,6 +388,16 @@ document.getElementById("timeFormatForm").addEventListener("submit", function(e)
 
 
 
+function observeResize(divId, offsetStr) {
+  const parent = document.getElementById(divId);
+  if (!parent) return;
+
+  const resizeObserver = new ResizeObserver(() => {
+    createFlagGlobe(divId, offsetStr);
+  });
+
+  resizeObserver.observe(parent);
+}
 
 
 
