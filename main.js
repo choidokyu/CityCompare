@@ -288,28 +288,28 @@ function renderBigNumbers(region, hourFormat, baseOffset, compareOffset) {
   if (!g) return;
   g.innerHTML = "";
 
-  const cx = 105, cy = 105;
-  const r = 100;
+  // ✅ 부모 SVG 크기 기준 동적 중심점과 반지름 계산
+  const svg = g.closest("svg");
+  const box = svg.getBoundingClientRect();
+  const w = box.width;
+  const h = box.height;
+  const cx = w / 2;
+  const cy = h / 2;
+  const r = w * 0.48;  // 시계테두리 반지름 비율 유지
+
   const count = hourFormat;
+  const fontSize = hourFormat === 12 ? w * 0.04 : w * 0.04; // 화면 너비 기준 폰트
 
-  let fontSize = hourFormat === 12 ? 8 : 8;
-
-  // 시차 계산
-  // compareOffset이 baseOffset보다 몇 시간 느린지(또는 빠른지)
   let diff = compareOffset - baseOffset;
 
   for (let i = 0; i < count; i++) {
-    // "내" 시계 기준 0~23(또는 1~12)번째 숫자가 "상대방" 시계 기준 몇 시인지
-    // 예: 8번째(오전 8시)라면, 반대편 도시는 (8+시차) % 24
-
-    // 기준이 되는 시간 (0~23, 1~12)
     let display;
     if (hourFormat === 12) {
-      let myHour = (i === 0 ? 12 : i);  // 원형 숫자 12,1,2,3...
-      let otherHour = (myHour + diff + 12 - 1) % 12 + 1; // 1~12로 보정
+      let myHour = (i === 0 ? 12 : i);
+      let otherHour = (myHour + diff + 12 - 1) % 12 + 1;
       display = otherHour;
     } else {
-      let myHour = i;  // 0~23
+      let myHour = i;
       let otherHour = (myHour + diff + 24) % 24;
       display = otherHour;
     }
@@ -333,6 +333,7 @@ function renderBigNumbers(region, hourFormat, baseOffset, compareOffset) {
     `;
   }
 }
+
 
 
 
