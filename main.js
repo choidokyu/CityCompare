@@ -410,6 +410,7 @@ function createFlagGlobe(divId, offsetStr) {
   const found = offsets.find(o => o.value === offsetStr);
   if (!found) return;
   const flagUrl = found.img;
+
   const parent = document.getElementById(divId);
   let width = parent.clientWidth || 220;
   let height = parent.clientHeight || 220;
@@ -448,9 +449,10 @@ function createFlagGlobe(divId, offsetStr) {
 
     //camera.position.z = 3.2;
     camera.position.z = 4.5;
+
     function animate() {
       requestAnimationFrame(animate);
-      sphere.rotation.y += 0.007;
+      sphere.rotation.y += 0.009;
       renderer.render(scene, camera);
     }
     animate();
