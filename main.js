@@ -438,7 +438,7 @@ function createFlagGlobe(divId, offsetStr) {
 
   const loader = new THREE.TextureLoader();
   loader.load(flagUrl, function(texture) {
-    const geometry = new THREE.SphereGeometry(radius, 18, 18);
+    const geometry = new THREE.SphereGeometry(radius, 48, 48);
     const material = new THREE.MeshPhongMaterial({
       map: texture,
       shininess: 45,
